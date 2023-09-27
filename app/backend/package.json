@@ -4,8 +4,10 @@
   "description": "",
   "main": ".build/server",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "ts-node-dev --watch \"./src/**\" --transpile-only ./src/server.ts"
+    "start": "node .build/server.js",
+    "build": "tsc --project tsconfig.json",
+    "dev": "ts-node-dev --watch \"./src/**\" --transpile-only ./src/server.ts",
+    "lint": "eslint ./src --ext .ts"
   },
   "keywords": [],
   "author": "",
