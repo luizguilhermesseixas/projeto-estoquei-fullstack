@@ -2,11 +2,13 @@
   "name": "backend",
   "version": "1.0.0",
   "description": "",
-  "main": ".build/server",
+  "main": "./src/server.ts",
   "scripts": {
+    "prebuild": "rm -rf ./build",
+    "build": "tsc",
+    "prestart": "npm run build",
     "start": "node .build/server.js",
-    "build": "tsc --project tsconfig.json",
-    "dev": "ts-node-dev --watch \"./src/**\" --transpile-only ./src/server.ts",
+    "dev": "ts-node-dev src/server.ts",
     "lint": "eslint ./src --ext .ts"
   },
   "keywords": [],
