@@ -27,6 +27,8 @@ model Product {
   id          Int      @id @default(autoincrement())
   name        String
   description String?
+  price       Decimal
+  sellPrice   Decimal
   category    Category @relation(fields: [categoryId], references: [id])
   categoryId  Int
   user        User     @relation(fields: [userId], references: [id])
@@ -52,8 +54,6 @@ model Category {
 model Entry {
   id        Int      @id @default(autoincrement())
   type      String
-  price     Decimal
-  sellPrice Decimal
   quantity  Int
   product   Product  @relation(fields: [productId], references: [id])
   productId Int
