@@ -13,7 +13,8 @@ services:
     depends_on:
       db:
         condition: service_healthy
-    env_file: ./backend/.env
+    env_file:
+      - ./backend/.env
     healthcheck:
       test: [ "CMD", "lsof", "-t", "-i:3001" ]
       timeout: 10s
@@ -24,7 +25,7 @@ services:
     ports:
       - 3306:3306
     environment:
-      - MYSQL_ROOT_PASSWORD=123456
+      - MYSQL_ROOT_PASSWORD=root
     restart: 'always'
     healthcheck:
       test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
