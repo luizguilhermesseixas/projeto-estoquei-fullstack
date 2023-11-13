@@ -3,7 +3,7 @@ export type ServiceMessage = {
 }
 
 export type ServiceResponseErrorType =
-'NOT_FOUND' | 'UNAUTHORIZED' | 'INVALID_DATA' | 'UNPROCESSABLE';
+  'NOT_FOUND' | 'UNAUTHORIZED' | 'INVALID_DATA' | 'UNPROCESSABLE' | 'CONFLICT' | 'INTERNAL_ERROR';
 
 export type ServiceResponseSuccesType = 'SUCCESSFUL' | 'CREATED';
 

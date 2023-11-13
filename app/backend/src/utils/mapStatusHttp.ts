@@ -6,6 +6,7 @@ const mapStatusHTTP = (status: string): number => {
   case 'UNAUTHORIZED': return 401;
   case 'NOT_FOUND': return 404;
   case 'UNPROCESSABLE': return 422;
+  case 'CONFLICT': return 409;
   default: return 500;
   }
 };
