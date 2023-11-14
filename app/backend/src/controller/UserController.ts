@@ -9,8 +9,13 @@ export default class UserController {
   ) {}
 
   public async createUser(req: Request, res: Response) {
-    const newUser: INewUser = req.body;
-    const { status, data } = await this.userService.createUser(newUser);
-    res.status(mapStatusHTTP(status)).json(data);
+    try {
+      const newUser: INewUser = req.body;
+      const { status, data } = await this.userService.createUser(newUser);
+      res.status(mapStatusHTTP(status)).json(data);
+    } catch (error) {
+      res.status(500).json({ message: 'Internal server error' });
+    }
+
   }
 }

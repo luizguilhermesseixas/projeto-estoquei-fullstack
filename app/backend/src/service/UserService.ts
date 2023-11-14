@@ -2,6 +2,7 @@ import UserModel from '../model/UserModel';
 import { ServiceResponse } from '../interfaces/ServiceResponse';
 import { INewUser, IUser } from '../interfaces/users/IUser';
 import { IUserModel } from '../interfaces/users/IUserModel';
+import * as bcrypt from 'bcryptjs';
 
 export default class UserService {
   constructor(
@@ -9,16 +10,23 @@ export default class UserService {
   ) {}
 
   public async createUser(newUser: INewUser): Promise<ServiceResponse<IUser>> {
-    const findUser = await this.userModel.findUserByEmail(newUser.email);
 
-    if (findUser) {
+    const findUserByEmail = await this.userModel.findUserByEmail(newUser.email);
+    const findUserByUsername = await this.userModel.findUserByUsername(newUser.username);
+
+    if (findUserByEmail || findUserByUsername) {
       return {
-        data: { message: 'Usuário já cadastrado.' },
+        data: { message: 'email ou nome de usuário já cadastrado.' },
         status: 'CONFLICT',
       };
     }
 
-    const user = await this.userModel.createUser(newUser);
+    const hashedPassword = await bcrypt.hash(newUser.password, 10);
+
+    const user = await this.userModel.createUser({
+      ...newUser,
+      password: hashedPassword,
+    });
 
     return {
       data: user,
