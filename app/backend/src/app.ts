@@ -1,11 +1,26 @@
-import express, {Express, Request, Response} from 'express';
+import express from 'express';
+import router from './routes';
 
-const app: Express = express();
+class App {
+  public app: express.Express ;
 
-app.use(express.json());
+  constructor() {
+    this.app = express();
 
-app.get('/', (_req: Request, res: Response) => {
-  return res.send({ message: 'HELLLOOOO!!' });
-});
+    this.app.use(express.json());
 
-export default app;
+    this.routes();
+  }
+
+  public start(port: number | string): void {
+    this.app.listen(port, () => {
+      console.log(`Server listening on port ${port}`);
+    });
+  }
+
+  private routes(): void {
+    this.app.use(router);
+  }
+}
+
+export default App;
