@@ -11,14 +11,10 @@ export default class UserService {
 
   public async createUser(newUser: INewUser): Promise<ServiceResponse<IUser>> {
 
-    const findUserByEmail = await this.userModel.findUserByEmail(newUser.email);
-    const findUserByUsername = await this.userModel.findUserByUsername(newUser.username);
+    const existingUser = await this.userModel.findUserByEmailOrUsername(newUser);
 
-    if (findUserByEmail || findUserByUsername) {
-      return {
-        data: { message: 'email ou nome de usuário já cadastrado.' },
-        status: 'CONFLICT',
-      };
+    if (existingUser) {
+      return { data: { message: 'email ou nome de usuário já cadastrado.' }, status: 'CONFLICT'};
     }
 
     const hashedPassword = await bcrypt.hash(newUser.password, 10);
@@ -28,9 +24,7 @@ export default class UserService {
       password: hashedPassword,
     });
 
-    return {
-      data: user,
-      status: 'CREATED',
-    };
+    return { data: user, status: 'CREATED' };
+
   }
 }

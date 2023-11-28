@@ -19,6 +19,18 @@ export default class UserModel implements IUserModel {
     return user;
   }
 
+  public async findUserByEmailOrUsername(newUser: INewUser): Promise<IUser | null> {
+    const user = await this.prismaClient.user.findFirst({
+      where: {
+        OR: [
+          {email: newUser.email},
+          {username: newUser.username},
+        ],
+      },
+    });
+    return user;
+  }
+
   async findUserByEmail(email: string): Promise<IUser | null> {
     const user = await this.prismaClient.user.findUnique({
       where: {
