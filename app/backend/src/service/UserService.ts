@@ -3,10 +3,12 @@ import { ServiceResponse } from '../interfaces/ServiceResponse';
 import { INewUser, IUser } from '../interfaces/users/IUser';
 import { IUserModel } from '../interfaces/users/IUserModel';
 import * as bcrypt from 'bcryptjs';
+import JwtUtils from '../utils/JwtUtils';
 
 export default class UserService {
   constructor(
     private userModel: IUserModel = new UserModel(),
+    private jwtUtils = new JwtUtils()
   ) {}
 
   public async createUser(newUser: INewUser): Promise<ServiceResponse<IUser>> {
