@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import UserService from '../service/UserService';
 import mapStatusHTTP from '../utils/mapStatusHttp';
-import { INewUser } from '../interfaces/users/IUser';
+import { ILogin, INewUser } from '../interfaces/users/IUser';
 
 export default class UserController {
   constructor(
@@ -17,5 +17,15 @@ export default class UserController {
       res.status(500).json({ message: 'Internal server error' });
     }
 
+  }
+
+  public async login(req: Request, res: Response) {
+    try {
+      const userLogin: ILogin = req.body;
+      const { status, data } = await this.userService.login(userLogin);
+      res.status(mapStatusHTTP(status)).json(data);
+    } catch (error) {
+      res.status(500).json({ message: 'Internal server error' });
+    }
   }
 }

@@ -12,4 +12,11 @@ userRouter.post(
   (req: Request, res: Response) => userController.createUser(req, res)
 );
 
+userRouter.post(
+  '/login',
+  UserValidation.validateLogin,
+  (req: Request, res: Response) => userController.login(req, res)
+);
+
+
 export default userRouter;

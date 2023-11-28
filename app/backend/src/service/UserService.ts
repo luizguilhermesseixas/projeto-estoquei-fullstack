@@ -1,6 +1,6 @@
 import UserModel from '../model/UserModel';
 import { ServiceResponse } from '../interfaces/ServiceResponse';
-import { INewUser, IUser } from '../interfaces/users/IUser';
+import { ILogin, INewUser, IUser, IUserToken } from '../interfaces/users/IUser';
 import { IUserModel } from '../interfaces/users/IUserModel';
 import * as bcrypt from 'bcryptjs';
 import JwtUtils from '../utils/JwtUtils';
@@ -19,7 +19,7 @@ export default class UserService {
       return { data: { message: 'email ou nome de usuário já cadastrado.' }, status: 'CONFLICT'};
     }
 
-    const hashedPassword = await bcrypt.hash(newUser.password, 10);
+    const hashedPassword = bcrypt.hashSync(newUser.password, 10);
 
     const user = await this.userModel.createUser({
       ...newUser,
@@ -28,5 +28,18 @@ export default class UserService {
 
     return { data: user, status: 'CREATED' };
 
+  }
+
+  public async login(userLogin: ILogin): Promise<ServiceResponse<IUserToken>> {
+
+    const user = await this.userModel.findUserByEmail(userLogin.email);
+
+    if (!user || !bcrypt.compareSync(userLogin.password, user.password)) {
+      return { data: { message: 'email ou senha incorretos.' }, status: 'NOT_FOUND' };
+    }
+
+    const token = this.jwtUtils.sign({ email: user.email });
+
+    return { data: { token }, status: 'SUCCESSFUL' };
   }
 }
