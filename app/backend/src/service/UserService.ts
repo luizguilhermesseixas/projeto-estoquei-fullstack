@@ -19,14 +19,30 @@ export default class UserService {
       return { data: { message: 'email ou nome de usuário já cadastrado.' }, status: 'CONFLICT'};
     }
 
-    const hashedPassword = bcrypt.hashSync(newUser.password, 10);
+    const encryptedPassword = bcrypt.hashSync(newUser.password, 10);
 
     const user = await this.userModel.createUser({
       ...newUser,
-      password: hashedPassword,
+      password: encryptedPassword,
     });
 
     return { data: user, status: 'CREATED' };
+
+  }
+
+  public async updateUser(id: number, updatedUser: INewUser): Promise<ServiceResponse<IUser>> {
+    const existingUser = await this.userModel.findUserById(id);
+    console.log(existingUser);
+
+    if (!existingUser) {
+      return { data: { message: 'usuário não encontrado.' }, status: 'NOT_FOUND' };
+    }
+
+    const encryptedPassword = bcrypt.hashSync(updatedUser.password, 10);
+
+    const user = await this.userModel.updateUser(id, {...updatedUser, password: encryptedPassword});
+
+    return { data: user, status: 'SUCCESSFUL' };
 
   }
 
@@ -38,7 +54,7 @@ export default class UserService {
       return { data: { message: 'email ou senha incorretos.' }, status: 'NOT_FOUND' };
     }
 
-    const token = this.jwtUtils.sign({ email: user.email });
+    const token = this.jwtUtils.sign({ email: user.email, id: user.id });
 
     return { data: { token }, status: 'SUCCESSFUL' };
   }

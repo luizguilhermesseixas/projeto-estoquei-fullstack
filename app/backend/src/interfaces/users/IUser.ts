@@ -4,9 +4,10 @@ export interface ILogin {
 }
 
 export interface IUser extends ILogin {
-  id?: number;
+  id: number;
   username: string;
   createdAt?: Date;
+  updatedAt?: Date;
 }
 
 export interface INewUser {
@@ -17,6 +18,7 @@ export interface INewUser {
 
 export interface IPayload {
   email: string;
+  id: number;
 }
 
 export interface IUserToken {

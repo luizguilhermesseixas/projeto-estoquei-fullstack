@@ -19,6 +19,29 @@ export default class UserModel implements IUserModel {
     return user;
   }
 
+  async updateUser(id: number, updatedUser: INewUser): Promise<IUser> {
+    const user = await this.prismaClient.user.update({
+      where: {
+        id,
+      },
+      data: {
+        email: updatedUser.email,
+        password: updatedUser.password,
+        username: updatedUser.username,
+      },
+    });
+    return user;
+  }
+
+  public async findUserById(id: number): Promise<IUser | null> {
+    const user = await this.prismaClient.user.findUnique({
+      where: {
+        id,
+      },
+    });
+    return user;
+  }
+
   public async findUserByEmailOrUsername(newUser: INewUser): Promise<IUser | null> {
     const user = await this.prismaClient.user.findFirst({
       where: {
@@ -40,12 +63,12 @@ export default class UserModel implements IUserModel {
     return user;
   }
 
-  async findUserByUsername(username: string): Promise<IUser | null> {
+/*   async findUserByUsername(username: string): Promise<IUser | null> {
     const user = await this.prismaClient.user.findUnique({
       where: {
         username,
       },
     });
     return user;
-  }
+  } */
 }

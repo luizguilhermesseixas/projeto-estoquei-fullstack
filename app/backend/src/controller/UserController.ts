@@ -28,4 +28,15 @@ export default class UserController {
       res.status(500).json({ message: 'Internal server error' });
     }
   }
+
+  public async updateUser(req: Request, res: Response) {
+    try {
+      const { id } = res.locals.user;
+      const updatedUser: INewUser = req.body;
+      const { status, data } = await this.userService.updateUser(Number(id), updatedUser);
+      res.status(mapStatusHTTP(status)).json(data);
+    } catch (error) {
+      res.status(500).json({ message: 'Internal server error' });
+    }
+  }
 }
