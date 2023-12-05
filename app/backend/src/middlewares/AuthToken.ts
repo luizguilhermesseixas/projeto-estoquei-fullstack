@@ -1,10 +1,10 @@
 import { Request, Response, NextFunction } from 'express';
 import JwtUtils from '../utils/JwtUtils';
 
+const jwtUtils = new JwtUtils();
+
+
 export default class AuthToken {
-  constructor(
-    private jwtUtils = new JwtUtils(),
-  ) {}
 
   public async validateToken(req: Request, res: Response, next: NextFunction) {
     const authHeader = req.headers['authorization'];
@@ -14,7 +14,7 @@ export default class AuthToken {
       return res.status(401).json({ message: 'usuário não autenticado.' });
     }
 
-    const decodedToken = this.jwtUtils.decode(token);
+    const decodedToken = jwtUtils.decode(token);
     res.locals.user = decodedToken;
 
     next();
